@@ -1,0 +1,504 @@
+openapi: 3.0.3
+info:
+  title: InfraMusicStore API
+  description: API pour gérer les artistes, albums, pistes et types de média
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: Artist
+    description: Routes pour gérer les artistes
+  - name: Album
+    description: Routes pour gérer les albums
+  - name: MediaType
+    description: Routes pour gérer les types de média
+  - name: Track
+    description: Routes pour gérer les pistes
+
+paths:
+  /:
+    get:
+      summary: Vérifier que l'API fonctionne
+      tags:
+        - Artist
+      responses:
+        '200':
+          description: Message de confirmation
+          content:
+            application/json:
+              example:
+                message: "API InfraMusicStore is running"
+
+# ====================
+# ARTISTS
+# ====================
+  /artists:
+    get:
+      tags:
+        - Artist
+      summary: Liste de tous les artistes
+      responses:
+        '200':
+          description: Liste d'objets Artist
+          content:
+            application/json:
+              example:
+                - ArtistId: 1
+                  Name: "AC/DC"
+                - ArtistId: 2
+                  Name: "Metallica"
+    post:
+      tags:
+        - Artist
+      summary: Créer un nouvel artiste
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "Nirvana"
+      responses:
+        '201':
+          description: Artiste créé
+          content:
+            application/json:
+              example:
+                ArtistId: 10
+                Name: "Nirvana"
+
+  /artists/{id}:
+    get:
+      tags:
+        - Artist
+      summary: Obtenir un artiste par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID de l'artiste
+      responses:
+        '200':
+          description: Artiste trouvé
+          content:
+            application/json:
+              example:
+                ArtistId: 1
+                Name: "AC/DC"
+    put:
+      tags:
+        - Artist
+      summary: Mettre à jour un artiste
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "New Artist Name"
+      responses:
+        '200':
+          description: Artiste mis à jour
+          content:
+            application/json:
+              example:
+                ArtistId: 1
+                Name: "New Artist Name"
+    delete:
+      tags:
+        - Artist
+      summary: Supprimer un artiste
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Artiste supprimé
+          content:
+            application/json:
+              example:
+                message: "Deleted"
+
+# ====================
+# ALBUMS
+# ====================
+  /albums:
+    get:
+      tags:
+        - Album
+      summary: Liste de tous les albums
+      responses:
+        '200':
+          description: Liste des albums
+          content:
+            application/json:
+              example:
+                - AlbumId: 1
+                  Title: "Back in Black"
+                  ArtistId: 1
+                - AlbumId: 2
+                  Title: "Ride the Lightning"
+                  ArtistId: 2
+    post:
+      tags:
+        - Album
+      summary: Créer un nouvel album
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Title:
+                  type: string
+                  example: "Nevermind"
+                ArtistId:
+                  type: integer
+                  example: 3
+      responses:
+        '201':
+          description: Album créé
+          content:
+            application/json:
+              example:
+                AlbumId: 10
+                Title: "Nevermind"
+                ArtistId: 3
+
+  /albums/{id}:
+    get:
+      tags:
+        - Album
+      summary: Obtenir un album par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Album trouvé
+          content:
+            application/json:
+              example:
+                AlbumId: 1
+                Title: "Back in Black"
+                ArtistId: 1
+    put:
+      tags:
+        - Album
+      summary: Mettre à jour un album
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Title:
+                  type: string
+                  example: "Updated Album"
+                ArtistId:
+                  type: integer
+                  example: 2
+      responses:
+        '200':
+          description: Album mis à jour
+          content:
+            application/json:
+              example:
+                AlbumId: 1
+                Title: "Updated Album"
+                ArtistId: 2
+    delete:
+      tags:
+        - Album
+      summary: Supprimer un album
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Album supprimé
+          content:
+            application/json:
+              example:
+                message: "Deleted"
+
+# ====================
+# MEDIATYPE
+# ====================
+  /mediatypes:
+    get:
+      tags:
+        - MediaType
+      summary: Liste de tous les types de média
+      responses:
+        '200':
+          description: Liste des types
+          content:
+            application/json:
+              example:
+                - MediaTypeId: 1
+                  Name: "MP3"
+                - MediaTypeId: 2
+                  Name: "WAV"
+    post:
+      tags:
+        - MediaType
+      summary: Créer un type de média
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "FLAC"
+      responses:
+        '201':
+          description: Type créé
+          content:
+            application/json:
+              example:
+                MediaTypeId: 3
+                Name: "FLAC"
+
+  /mediatypes/{id}:
+    get:
+      tags:
+        - MediaType
+      summary: Obtenir un type de média par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Type trouvé
+          content:
+            application/json:
+              example:
+                MediaTypeId: 1
+                Name: "MP3"
+    put:
+      tags:
+        - MediaType
+      summary: Mettre à jour un type
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "Updated Type"
+      responses:
+        '200':
+          description: Type mis à jour
+          content:
+            application/json:
+              example:
+                MediaTypeId: 1
+                Name: "Updated Type"
+    delete:
+      tags:
+        - MediaType
+      summary: Supprimer un type
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Type supprimé
+          content:
+            application/json:
+              example:
+                message: "Deleted"
+
+# ====================
+# TRACKS
+# ====================
+  /tracks:
+    get:
+      tags:
+        - Track
+      summary: Liste de toutes les pistes
+      responses:
+        '200':
+          description: Liste des pistes
+          content:
+            application/json:
+              example:
+                - TrackId: 1
+                  Name: "Hells Bells"
+                  AlbumId: 1
+                  MediaTypeId: 1
+                  Milliseconds: 312000
+                  UnitPrice: 0.99
+    post:
+      tags:
+        - Track
+      summary: Créer une piste
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "Enter Sandman"
+                AlbumId:
+                  type: integer
+                  example: 2
+                MediaTypeId:
+                  type: integer
+                  example: 1
+                Milliseconds:
+                  type: integer
+                  example: 331000
+                UnitPrice:
+                  type: number
+                  example: 0.99
+      responses:
+        '201':
+          description: Piste créée
+          content:
+            application/json:
+              example:
+                TrackId: 10
+                Name: "Enter Sandman"
+                AlbumId: 2
+                MediaTypeId: 1
+                Milliseconds: 331000
+                UnitPrice: 0.99
+
+  /tracks/{id}:
+    get:
+      tags:
+        - Track
+      summary: Obtenir une piste par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Piste trouvée
+          content:
+            application/json:
+              example:
+                TrackId: 1
+                Name: "Hells Bells"
+                AlbumId: 1
+                MediaTypeId: 1
+                Milliseconds: 312000
+                UnitPrice: 0.99
+    put:
+      tags:
+        - Track
+      summary: Mettre à jour une piste
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  example: "Updated Track"
+                AlbumId:
+                  type: integer
+                  example: 1
+                MediaTypeId:
+                  type: integer
+                  example: 2
+                Milliseconds:
+                  type: integer
+                  example: 300000
+                UnitPrice:
+                  type: number
+                  example: 1.29
+      responses:
+        '200':
+          description: Piste mise à jour
+          content:
+            application/json:
+              example:
+                TrackId: 1
+                Name: "Updated Track"
+                AlbumId: 1
+                MediaTypeId: 2
+                Milliseconds: 300000
+                UnitPrice: 1.29
+    delete:
+      tags:
+        - Track
+      summary: Supprimer une piste
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Piste supprimée
+          content:
+            application/json:
+              example:
+                message: "Deleted"
